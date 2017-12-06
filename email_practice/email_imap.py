@@ -1,8 +1,8 @@
 import email
 import imaplib
 
-username = "gaxen8753@gmail.com"
-password = "Jn#__69t?31"
+username = "寄信帳號"
+password = "寄信密碼"
 
 mail = imaplib.IMAP4_SSL("imap.gmail.com")
 mail.login(username,password)
