@@ -6,11 +6,11 @@ host = "smtp.gmail.com"
 port = 587
 
 #要寄信的帳號
-username = "gaxen8753@gmail.com"
-password = "Jn#__69t?31"
+username = "寄信帳號"
+password = "寄信密碼"
 
 #要收信的帳號
-to_username = "gh2752@gmail.com"
+to_username = "收信帳號"
 
 
 # 建立和gmail連線
