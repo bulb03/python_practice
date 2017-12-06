@@ -27,16 +27,12 @@ for no in data:
 		skill = " "
 		workpage = " "
 		url = "https:"+i.attrs['href']
-		
 		#urlopen(url)所開出來的網頁，在抓工作內容那行會有問題，因為那個p裡面包著br，因此，用urlopen抓的會只抓到最後一行
-		
-		
 		#連上該職位之網頁
 		wd.get(url)
 		html1 = wd.execute_script("return document.documentElement.outerHTML")
 		the_page1 = BeautifulSoup(html1,"html.parser")
 		time.sleep(1)
-		
 		#印出第幾個
 		print(count_data)
 		try:
@@ -51,7 +47,6 @@ for no in data:
 					break
 				else:	
 					count += 1
-
 			#需求技能
 			time.sleep(1)
 			for i in work_part.findAll('dd',{'class':'tool'}):
