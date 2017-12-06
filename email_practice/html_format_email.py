@@ -9,10 +9,10 @@ from smtplib import SMTPAuthenticationError,SMTPException
 host = "smtp.gmail.com"
 port = 587
 
-username = "gaxen8753@gmail.com"
-password = "Jn#__69t?31"
+username = "寄信帳號"
+password = "寄信密碼"
 
-to_username = "gh2752@gmail.com"
+to_username = "收信帳號"
 
 email_conn = smtplib.SMTP(host,port)
 email_conn.ehlo()
