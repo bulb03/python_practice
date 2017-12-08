@@ -4,7 +4,7 @@ import requests
 from selenium import webdriver
 import time
 
-wd = webdriver.Chrome()
+wd = webdriver.Firefox()
 
 url_list = []
 
@@ -28,12 +28,8 @@ for work in job:
 	try:
 		for i in data:
 			time.sleep(1)
-			for j in i.findAll('div',{'class':'jbInfo'}):
-				time.sleep(1)	
-				for k in j.findAll('div',{'class':'jbInfoin'}):
-					time.sleep(1)	
-					for l in k.find('h3').findAll('a',limit=5):
-						url_list.append("https:"+l.attrs['href'])
+			for j in i.find('div',{'class':'jbInfo'}).find('div',{'class':'jbInfoin'}).find('h3').findAll('a',limit=5):
+				url_list.append("https:"+j.attrs['href'])
 	except AttributeError as error:
 		print(error)
 		pass
@@ -53,25 +49,23 @@ for work in job:
 		the_page = BeautifulSoup(html,"html.parser")
 		try:
 			time.sleep(1)
-			data = the_page.find('div',{'class':'descriptin'}).find('section',{'id':'incontent'}).find('div',{'id':'c1'}).find('div',{'class':'floatL w65'}).find('article',{'class':'boxsize'}).find('ul',{'class':'dataList'})
-			time.sleep(1)
+			data = the_page.find('div',{'id':'descriptin'}).find('section',{'id':'incontent'}).find('div',{'id':'c1'}).find('div',{'class':'floatL w65'}).find('article',{'class':'boxsize'}).find('ul',{'class':'dataList'})
 			for i in data.findAll('li'):
-				if count < 5:
-					count += 1
-					continue
-				elif count==5:
-					time.sleep(1)
-					skill = i.find('div',{'class':'listContent'}).get_text()
-					skill += "\n"
-					count += 1
-					print(skill)
-				else:
-					for j in i.find('div',{'class':'listContent'}).next_sibling.findAll('p'):
+					if count < 6:
+						count += 1
+					elif count==6:
 						time.sleep(1)
-						else_skill += j
-					else_skill += "\n"
-					print(else_skill)
-					count += 1
+						skill = i.find('div',{'class':'listContent'}).get_text()
+						skill += " \n"
+						count += 1
+						print(skill)
+					else:
+						for j in i.find('div',{'class':'listContent'}).next_sibling.findAll('p'):
+							time.sleep(1)
+							else_skill += j
+							else_skill += " \n"
+							print(else_skill)
+						count += 1
 		except AttributeError as error:
 			print(error)
 			pass
