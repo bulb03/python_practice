@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
 
-wd = webdriver.Chrome()
+wd = webdriver.Firefox()
 
 data = ["系統分析與設計工程師","專案經理","韌體工程師","電玩軟體程式工程師","MIS網管人員","MIS工程師","巨量資料分析師","資訊安全工程師","網路安全分析師","網路管理工程師","產品設備維修工程師","資訊及通訊操作技術人員","電腦網路及系統技術人員","網站技術人員","多媒體動畫設計人員","遊戲設計人員","網站多媒體程式開發人員","廣告行銷企劃人員","品牌企劃人員","網路行銷人員"]
 
@@ -30,17 +30,19 @@ for no in data:
 		#urlopen(url)所開出來的網頁，在抓工作內容那行會有問題，因為那個p裡面包著br，因此，用urlopen抓的會只抓到最後一行
 		#連上該職位之網頁
 		wd.get(url)
+		time.sleep(1)
 		html1 = wd.execute_script("return document.documentElement.outerHTML")
 		the_page1 = BeautifulSoup(html1,"html.parser")
-		time.sleep(1)
 		#印出第幾個
 		print(count_data)
 		try:
+			time.sleep(1)
 			#工作內容
 			workpage=the_page1.find('div',{'class':'grid-left'}).find('main',{'class':'main'}).find('section',{'class':'info'}).find('div',{'class':'content'}).find('p').get_text()
 			workpage += "\n"
 			print(workpage)
 			count = 0
+			time.sleep(1)
 			for i in the_page1.find('div',{'class':'grid-left'}).find('main',{'class':'main'}).section.next_siblings:
 				if count==1:
 					work_part = i
@@ -49,18 +51,22 @@ for no in data:
 					count += 1
 			#需求技能
 			time.sleep(1)
-			for i in work_part.findAll('dd',{'class':'tool'}):
-				for j in i.findAll('a'):
-					if j.text.equals("不拘"):
-						pass
-					else:
-						skill += j.text
-						skill += " \n"
-			for i in work_part.findAll('dd'):
-				if count<7:
-					count += 1
+			#work_part現在就是第二個section，不需要再find('section')
+			work_part2 = work_part.find('div',{'class':'content'}).find('dl')
+			time.sleep(1)
+			for j in work_part2.findAll('dd',{'class':'tool'}):
+				#if j.text.equals("不拘")這行有問題，會全部都沒抓到
+				skill += j.text
+				skill += " \n"
+			for k in work_part2.findAll('dd'):
+				#count計算錯誤
+				if count<8:
+					count+=1
 				else:
-					skill += i.text+"\n"
+					skill += k.text
+					skill += "\n"
+					break
+			print("----------------------------------\n")
 		except AttributeError:
 			pass
 
