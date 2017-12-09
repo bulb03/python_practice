@@ -1,94 +1,78 @@
-"""爬蟲非常需要加上time.sleep，不然，跑太快，還沒抓到想抓的資料就換下一頁了
-"""
-from urllib.request import urlopen
+#依舊有bug
 from bs4 import BeautifulSoup
+import requests
 from selenium import webdriver
 import time
 
-wd = webdriver.Chrome()
+wd = webdriver.Firefox()
 
-data = ["系統分析與設計工程師","專案經理","韌體工程師","電玩軟體程式工程師","MIS網管人員","MIS工程師","巨量資料分析師","資訊安全工程師","網路安全分析師","網路管理工程師","產品設備維修工程師","資訊及通訊操作技術人員","電腦網路及系統技術人員","網站技術人員","多媒體動畫設計人員","遊戲設計人員","網站多媒體程式開發人員","廣告行銷企劃人員","品牌企劃人員","網路行銷人員"]
+url_list = []
 
-j = 0
+job = ["系統分析與設計工程師","專案經理","韌體工程師","電玩軟體程式工程師","MIS網管人員","MIS工程師","巨量資料分析師","資訊安全工程師","網路安全分析師","網路管理工程師","產品設備維修工程師","資訊及通訊操作技術人員","電腦網路及系統技術人員","網站技術人員","多媒體動畫設計人員","遊戲設計人員","網站多媒體程式開發人員","廣告行銷企劃人員","品牌企劃人員","網路行銷人員"]
 
-for no in data:
-	url = "https://www.104.com.tw/jobs/search/?ro=0&keyword="+no+"&order=7&asc=0&kwop=7&page=1&mode=s&jobsource=n104bank1"
-	
+for work in job:
+
+	url = "https://www.1111.com.tw/job-bank/job-index.asp?si=1&ss=s&ks="+work
+
 	wd.get(url)
-	html = wd.execute_script("return document.documentElement.outerHTML")
-	the_page = BeautifulSoup(html,"html.parser")
-	
-	time.sleep(1)
-	
-	list = the_page.findAll('a',{'class':'js-job-link'},limit=10)
-	
-	print(no)
-	
-	count_data = 1
-	
-	with open("test.csv", "a") as textfile:
-		textfile.write(no)
-	
-	#開始抓十個職位
-	for i in list:
-		skill = " "
-		workpage = " "
-		url = "https:"+i.attrs['href']
-		
-		#urlopen(url)所開出來的網頁，在抓工作內容那行會有問題，因為那個p裡面包著br，因此，用urlopen抓的會只抓到最後一行
-		#連上該職位之網頁
-		
-		wd.get(url)
-		time.sleep(1)
-		html1 = wd.execute_script("return document.documentElement.outerHTML")
-		the_page1 = BeautifulSoup(html1,"html.parser")
-		#印出第幾個
-		print(count_data)
-		try:
-			time.sleep(1)
-			#工作內容
-			workpage=the_page1.find('div',{'class':'grid-left'}).find('main',{'class':'main'}).find('section',{'class':'info'}).find('div',{'class':'content'}).find('p').get_text()
-			workpage += "\n"
-			print(workpage)
-			count = 0
-			time.sleep(1)
-			for i in the_page1.find('div',{'class':'grid-left'}).find('main',{'class':'main'}).section.next_siblings:
-				if count==1:
-					work_part = i
-					break
-				else:	
-					count += 1
-			#需求技能
-			time.sleep(1)
-			#work_part現在就是第二個section，不需要再find('section')
-			work_part2 = work_part.find('div',{'class':'content'}).find('dl')
-			time.sleep(1)
-			for j in work_part2.findAll('dd',{'class':'tool'}):
-				#if j.text.equals("不拘")這行有問題，會全部都沒抓到
-				skill += j.text
-				skill += " \n"
-			for k in work_part2.findAll('dd'):
-				#count計算錯誤
-				if count<8:
-					count+=1
-				else:
-					skill += k.text
-					skill += "\n"
-					break
-			print("----------------------------------\n")
-		except AttributeError:
-			pass
 
-		#如果出現別的問題，pass掉
-		time.sleep(1)
+	html = wd.execute_script("return document.documentElement.outerHTML")
+
+	the_page = BeautifulSoup(html,"html.parser")
+
+	"""重大發現：findAll必須切開寫，不能夠x.findAll(...).findAll(...)
+	"""
+	time.sleep(1)
+	#抓每個職位的十個工作
+	data = the_page.findAll('li',{'class':'digest'})
+	try:
+		for i in data:
+			time.sleep(1)
+			for j in i.find('div',{'class':'jbInfo'}).find('div',{'class':'jbInfoin'}).find('h3').findAll('a',limit=10):
+				url_list.append("https:"+j.attrs['href'])
+	except AttributeError as error:
+		print(error)
+		pass
+
+	#抓每個工作的需求技能
+	for i in url_list:
+		skill = " "
+		else_skill = " "
+		count = 0
+		count_data = 1
+
+		with open("test2.csv","a") as a:
+			a.write(work)
+
+		wd.get(i)
+		html = wd.execute_script("return document.documentElement.outerHTML")
+		the_page = BeautifulSoup(html,"html.parser")
 		try:
-			with open("test.csv", "a") as textfile:
-				input_no = str(count_data) + "\n"
-				textfile.write(input_no)
-				textfile.write(workpage)
-				textfile.write(skill)
-				textfile.write("----------------------------------\n")
-			count_data += 1
+			time.sleep(1)
+			data = the_page.find('div',{'id':'descriptin'}).find('section',{'id':'incontent'}).find('div',{'id':'c1'}).find('div',{'class':'floatL w65'}).find('article',{'class':'boxsize'}).find('ul',{'class':'dataList'})
+			for i in data.findAll('li'):
+					if count < 6:
+						count += 1
+					elif count==6:
+						time.sleep(1)
+						skill = i.find('div',{'class':'listContent'}).get_text()
+						skill += " \n"
+						count += 1
+					else:
+						for j in i.find('div',{'class':'listContent'}).next_sibling.findAll('p'):
+							time.sleep(1)
+							else_skill += j.text
+							else_skill += " \n"
+						count += 1
+		except AttributeError as error:
+			pass
+		print(skill)
+		print(else_skill)
+		try:
+			with open("test2.csv","a") as a:
+				a.write(str(count_data))
+				a.write(skill)
+				a.write(else_skill)
+				a.write("--------------------------------\n")
 		except:
 			pass
-	time.sleep(3)
