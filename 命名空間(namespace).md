@@ -20,7 +20,6 @@ say_hello()
 
 到這裡為止，你應該知道命名空間是啥了，但是，你肯定會發現一個*不協調*的點：
 **為何一下import requests，一下from selenium import webdriver？**
-
 **通通用import就好了不是嗎？**
 沒錯，的確只要用import就可以了，這裡會這樣寫是為了說明from...import...也是可以的，那好處是什麼？那就是不用在函數前加上模組名稱
 
@@ -47,7 +46,7 @@ TypeError: say_hello() missing 1 required positional argument: 'i'*
 
 因此，最好的方式就是乖乖把模組名稱給放在函數前面，這樣就不會有問題了
 
-補充：
+補充
 -------------------
 polite的：
 ```python
