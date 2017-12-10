@@ -44,7 +44,7 @@ TypeError: say_hello() missing 1 required positional argument: 'i'*
         
 因為polite的say_hello會蓋掉say_hello的say_hello，我最後面會放上polite和say_hello的say_hello(寫到後面都有點搞混誰是誰的say_hello...，我的命名太悲劇了QQ)
 
-因此，最好的方式就是乖乖把模組名稱給放在函數前面，這樣就不會有問題了
+因此，最好的方式就是用import，乖乖把模組名稱給放在函數前面，這樣就不會有問題了
 
 補充
 -------------------
