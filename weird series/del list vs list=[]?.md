@@ -221,4 +221,8 @@ for i in m:
 	print(i)
 ```
 
-[參考網址： del 陳述式](https://docs.python.org.tw/3/tutorial/datastructures.html)
+參考網址
+------------
+[del 陳述式](https://docs.python.org.tw/3/tutorial/datastructures.html)
+[Python特色簡述－變數與記憶體管理](https://dotblogs.com.tw/billy3321/2009/01/02/6599)
+[物件與記憶體管理](https://openhome.cc/Gossip/Python/ObjectInMemory.html)
