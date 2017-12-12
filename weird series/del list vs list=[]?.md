@@ -60,5 +60,6 @@ with open(file_path) as f :
 
 for i in m:
 	print(i)
-
 ```
+
+[參考網址： del 陳述式](https://docs.python.org.tw/3/tutorial/datastructures.html)
