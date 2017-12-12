@@ -29,7 +29,7 @@ for i in m:
 
 更新區
 ======================
-後來，我就直接放棄這個問題，跑去找list[:]的解釋，偶然間就看到有個list的function：clear()，功能跟del list[:]是一樣的；就姑且一試，當然，m裡面都是[]，突然間，我想起做rpg時為了知道物件變數傳到哪時寫了print(物件變數)，然後會出現該物件在哪個記憶體位址；我就去找如何顯示物件的記憶體位址，找到了id()
+後來，我就直接放棄這個問題，跑去找list[:]的解釋，偶然間就看到有個list的**function：clear()**，功能跟del list[:]是一樣的；就姑且一試，當然，m裡面還是[]，突然間，我想起做rpg時為了知道物件變數傳到哪時寫了print(物件變數)，然後會出現該物件在哪個記憶體位址；我就去找如何顯示物件的記憶體位址，找到了**id()**
 便做了以下測試：
 
 在使用n=[]時並顯示n的位址
@@ -224,5 +224,7 @@ for i in m:
 參考網址
 ------------
 [del 陳述式](https://docs.python.org.tw/3/tutorial/datastructures.html)
+
 [Python特色簡述－變數與記憶體管理](https://dotblogs.com.tw/billy3321/2009/01/02/6599)
+
 [物件與記憶體管理](https://openhome.cc/Gossip/Python/ObjectInMemory.html)
