@@ -4,4 +4,6 @@
 
 # python 參考文件
 
-3.5.2：https://docs.python.org.tw/3/index.html
+目前版本：3.5.2：https://docs.python.org.tw/3/index.html
+         
+         函數解釋：https://docs.python.org.tw/3/tutorial/
