@@ -1,6 +1,6 @@
 簡介
 ==============
-視那些字是關鍵字
+看那些字是python關鍵字
 
 函數
 ==============
@@ -12,6 +12,8 @@
 EX：
 
 keyword.iskeyword('True') ==> True
+
+keyword.iskeyword('status') ==> False
 
 *keyword.kwlist*
 -----------------------
