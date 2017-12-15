@@ -14,7 +14,7 @@ def write_into(old_file):
 		textfile.write(str(sex))
 		textfile.close()
 
-#判斷該路徑的檔案是否存在或是否有資料
+#判斷json檔是否存在或是否有資料
 if os.path.isfile(file_path) and os.stat(file_path).st_size != 0:
 
 	#雖然他多寫r+，但實際結果感覺一樣
