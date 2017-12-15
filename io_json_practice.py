@@ -1,12 +1,10 @@
 import simplejson as json
 import os
 
-file_path = "你的json檔的path"
+file_path = "C://Users//apple//Desktop//ages.json"
 
-#將json檔的資料寫入txt檔內
-def write_into(old_file):
-	data = json.loads(old_file.read())
-	with open("將json格式資料寫入的目的地檔案的路徑","a+") as textfile:
+def write_into(data):
+	with open("C://Users//apple//Desktop//test.txt","a+") as textfile:
 		age = "ages:",str(data["ages"])
 		sex = "sex:",str(data["sex"])
 		#textfile.write()一次只能給一個參數
@@ -14,15 +12,23 @@ def write_into(old_file):
 		textfile.write(str(sex))
 		textfile.close()
 
-#判斷json檔是否存在或是否有資料
+#判斷該路徑的檔案是否存在或是否有資料
 if os.path.isfile(file_path) and os.stat(file_path).st_size != 0:
 
+	#將json檔的資料寫入txt檔內
+		
 	#雖然他多寫r+，但實際結果感覺一樣
 	#old_file = open(file_path,"r+")
 	old_file = open(file_path)
+	
+	#json.loads()：從json檔讀資料後，將其從str轉換成dictionary
+	#順帶一提，read會回傳str
+	#data = json.loads(old_file.read())
 
-	#將json檔的資料寫入txt檔內
-	write_into(old_file)
+	#json.load()：直接從json檔讀資料，因此，可以說他具備read()的功能
+	data = json.load(old_file)
+	write_into(data)
+
 
 else:
 	#如果json檔不存在，就新增一個，然後幫他寫入資料
@@ -37,8 +43,18 @@ else:
 	old_file.write(json.dumps(data))
 	
 	#將json檔的資料寫入txt檔內
-	write_into(old_file)
+	
+	#雖然他多寫r+，但實際結果感覺一樣
+	#old_file = open(file_path,"r+")
+	old_file = open(file_path)
+	
+	#json.loads()：從json檔讀資料後，將其從str轉換成dictionary
+	#順帶一提，read會回傳str
+	#data = json.loads(old_file.read())
 
+	#json.load()：直接從json檔讀資料，因此，可以說他具備read()的功能
+	data = json.load(old_file)
+	write_into(data)
 
 
 
