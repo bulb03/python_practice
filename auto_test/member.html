@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			text-align: center;
+		}
+	</style>
+    <!-- <script src="../HTML2/HTML2/js/jquery-3.3.1.min.js"></script> -->
+
+</head>
+<!-- 	<script>
+	$(document).on('click','#button1',function click_(){
+		$.ajax({
+		url:'login.php',
+		data:{"username":$('#account').val(),"password":$('#password').val()},
+		success:function(response){
+
+		},
+		error: function(xhr){
+		},
+		type:'POST',
+		dataType:'json',
+		});
+	})
+</script> -->
+<body>
+	<form method="POST" action="login.php">
+		<div>
+			<p>會員管理系統</p>
+			帳號：<input type="text" name="account">
+			密碼：<input type="password" name="pwd">
+			<input type="submit" value="登入">
+			<a href="register.html"><input type="button" value="按此免費加入會員"></a>
+			<!-- <a href="update.php"><input type="button" value="變更密碼"></a> -->
+		</div>
+	</form>
+</body>
+</html>

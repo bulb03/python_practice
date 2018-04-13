@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<form method="POST" action="register.php">
+		帳號：<input type="text" name="youraccount">
+		密碼：<input type="password" name="yourpwd">
+		類型：<input type="radio" name="type" value="worker">worker
+		<input type="radio" name="type" value="supervisor">supervisor
+		生日：<input name="birthday" type="date">
+		需求：<input type="checkbox" value="a" name="need[]">a<input type="checkbox" value="b" name="need[]">b<input type="checkbox" value="c" name="need[]">c
+		<input type="submit" value="submit">
+		<input type="reset" value="reset">
+	</form>
+</body>
+</html>
