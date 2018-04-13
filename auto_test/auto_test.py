@@ -30,30 +30,35 @@ def write_the_fault(excel_be_written,is_success,store_dict,test_title,fail_pass,
 	excel_be_written.save("test.xls")
 
 #登入測試
-def login_test():
-	try:
-		wd = webdriver.Chrome()
-		wd.get("http://localhost/membersystem/member.html")
+def login_test(data):
+	data_ = data.split(';')
+	i = 0
+	while i<len(data_):
+		data__ = data_[i].split(',')
+		try:
+			wd = webdriver.Chrome()
+			wd.get("http://localhost/membersystem/member.html")
 
-		time.sleep(1)
+			time.sleep(1)
 
-		account = wd.find_element_by_xpath("/html/body/form/div/input[1]")
-		time.sleep(1)
-		account.clear
-		account.send_keys("admin")
+			account = wd.find_element_by_xpath("/html/body/form/div/input[1]")
+			time.sleep(1)
+			account.clear
+			account.send_keys(data__[0])
 
-		pwd = wd.find_element_by_xpath("/html/body/form/div/input[2]")
-		time.sleep(1)
-		pwd.clear
-		pwd.send_keys("admin")
+			pwd = wd.find_element_by_xpath("/html/body/form/div/input[2]")
+			time.sleep(1)
+			pwd.clear
+			pwd.send_keys(data__[1])
 
-		wd.find_element_by_xpath("/html/body/form/div/input[3]").click()
-		time.sleep(1)
-		return 1
+			wd.find_element_by_xpath("/html/body/form/div/input[3]").click()
+			time.sleep(1)
+			return 1
 
-	except Exception as e:
-		print(e)
-		return 0
+		except Exception as e:
+			print(e)
+			return 0
+		i += 1
 
 	wd.quit()
 
@@ -88,6 +93,51 @@ def logout_test():
 
 	wd.quit()
 
+#註冊測試
+def register_test(data):
+	data_ = data.split(';')
+	i = 0
+	j = 0
+	data__ = data_[i].split(',')
+	while i<len(data_):
+		try:
+			wd = webdriver.Chrome()
+			wd.get("http://localhost/membersystem/register.html")
+			
+			time.sleep(1)
+
+			account = wd.find_element_by_xpath("/html/body/form/input[1]")
+			time.sleep(1)
+			account.clear
+			account.send_keys(data__[0])
+
+			pwd = wd.find_element_by_xpath("/html/body/form/input[2]")
+			time.sleep(1)
+			pwd.clear
+			pwd.send_keys(data__[1])
+
+			wd.find_element_by_id(data__[2]).click()
+			time.sleep(1)
+
+			wd.find_element_by_xpath("/html/body/form/input[5]").send_keys(data__[3])
+			time.sleep(1)
+
+			checkbox_data = (data__[4].lstrip("(")).split(",")
+			while j<len(checkbox_data):			
+				wd.find_element_by_id(checkbox_data[j]).click()
+				time.sleep(1)
+				j += 1
+
+			wd.find_element_by_xpath("/html/body/form/input[9]").click()
+			time.sleep(1)
+			return 1
+
+		except Exception as e:
+			print(e)
+			return 0
+
+	wd.quit()
+
 #判斷前置測試是否通過
 def whether_pass_pre(pre_test,store_dict):
 	i = 0
@@ -109,10 +159,10 @@ def whether_pass_pre(pre_test,store_dict):
 		return 0,fail_pass_title
 
 #判斷該用哪個測試函數
-def judge(test_title,i):
+def judge(test_title,i,row_data):
 	is_success=0
 	if test_title[int(i)]=='A-1':
-		is_success = login_test()#幹你娘，到底誰說可以不用在函數名稱後加括號
+		is_success = login_test(row_data.cell(9,0).value)#幹你娘，到底誰說可以不用在函數名稱後加括號
 	
 		write_the_fault(excel_be_written,is_success,store_dict,test_title[i],"",int(i))
 	
@@ -120,22 +170,28 @@ def judge(test_title,i):
 		is_success = logout_test()
 	
 		write_the_fault(excel_be_written,is_success,store_dict,test_title[i],"",int(i))
-
+	
+	elif test_title[int(i)]=='C-1':
+		is_success = register_test(row_data.cell(9,0).value)
+	
+		write_the_fault(excel_be_written,is_success,store_dict,test_title[i],"",int(i))
 i = 0
 
+#儲存測試是否成功(用於檢查前置測試的)
 store_dict = {
 	'A-1':0,
-	'B-1':0
+	'B-1':0,
+	'C-1':0
 }
 
 #測試檔案的名稱
 file_name = "test.xls"
 
 #測試功能的sheet名稱
-sheet_name = ['login','logout']
+sheet_name = ['login','logout','register']
 
 #測試名稱
-test_title = ['A-1','B-1']
+test_title = ['A-1','B-1','C-1']
 
 #開啟測試檔案
 the_whole_excel = xlrd.open_workbook(file_name)
@@ -151,19 +207,19 @@ while i < len(sheet_name):
 	#檢查是否有前置測試需做
 	if int(row_data.cell(3,0).value):
 		#取得前置測試所有名稱
-		pre_test_ = row_data.cell_value(8,0)
+		pre_test_ = row_data.cell(8,0).value
 		#將測試名稱分開存入pre_test這list裡
 		pre_test = pre_test_.split(',')
 		#檢查是否全部前置測試都成功運作
 		pre_test_pass,fail_pass = whether_pass_pre(pre_test,store_dict)
 		#判斷前置測試是否都成功
 		if pre_test_pass:
-			judge(test_title,i)
+			judge(test_title,i,row_data)
 		else:
 			#若有一項前置測試失敗，直接跳過目前的測試，在測試檔案裡寫上失敗
 			write_the_fault(excel_be_written,2,store_dict,test_title[i],fail_pass,i)
 	else:
-		judge(test_title,i)
+		judge(test_title,i,row_data)
 	i += 1
 
 
@@ -173,7 +229,7 @@ while i < len(sheet_name):
 #======字串的比較放在if裡的失敗=========
 # 以字串是否相同來當作ifelse的條件
 # 出現不明失敗
-# 反正就是不能
+# 反正就是不能當作條件
 # 所以我在測試檔案裡加了是否有前置測試代碼
 # 1就是有 0就是沒有
 
