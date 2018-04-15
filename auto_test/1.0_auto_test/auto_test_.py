@@ -2,24 +2,32 @@ from excel_ import excel_
 from Utils import Utils
 
 i = 0
-judgement = "Y"
-
 
 #儲存測試是否成功(用於檢查前置測試的)
 store_dict = {
-	'A-1':0,
-	'B-1':0,
-	'C-1':0
+	'A-1-1':0,
+	'B-1-1':0,
+	'C-1-1':0,
+	'D-1-1':0,
+	'E-1-1':0,
+	'C-1-2':0,
+	'D-1-2':0,
+	'E-1-2':0,
+	'C-1-3':0,
+	'D-1-3':0,
+	'E-1-3':0
 }
 
 #測試檔案的名稱
-file_name = "test.xls"
+file_name = "PlanningandManage.xls"
 
 #測試功能的sheet名稱
-sheet_name = ['login','logout','register']
+sheet_name = ['login-regionalcenter','logout-regionalcenter','meetinglist_rev-regionalcenter','meetinglist_add-regionalcenter','meetinglist_del-regionalcenter','edulecture_rev-regionalcenter','edulecture_add-regionalcenter','edulecture_del-regionalcenter','visit_rec_rev-regionalcenter','visit_rec_add-regionalcenter','visit_rec_del-regionalcenter']
+# sheet_name = ['edulecture_rev-regionalcenter','edulecture_add-regionalcenter','edulecture_del-regionalcenter']
 
 #測試名稱
-test_title = ['A-1','B-1','C-1']
+test_title = ['A-1-1','B-1-1','C-1-1','D-1-1','E-1-1','C-1-2','D-1-2','E-1-2','C-1-3','D-1-3','E-1-3']
+# test_title = ['C-1-2','D-1-2','E-1-2']
 
 excel__ = excel_(file_name,sheet_name,test_title)
 
@@ -48,11 +56,19 @@ while i < len(sheet_name):
 		if pre_test_pass:
 			utils.judge(test_title,i,row_data,excel_be_written,excel__,store_dict)
 		else:
+			utils.record_num_of_fault(2)
+
+			utils.record_title['pre_test_fail'] += test_title[i]+","
+
 			#若有一項前置測試失敗，直接跳過目前的測試，在測試檔案裡寫上失敗
 			excel__.write_the_fault(excel_be_written,2,store_dict,test_title[i],fail_pass,i)
 	else:
 		utils.judge(test_title,i,row_data,excel_be_written,excel__,store_dict)
 	i += 1
+
+print("success:"+str(utils.record['success'])+" fail:"+str(utils.record['fail'])+" pre_test_fail:"+str(utils.record['pre_test_fail']))
+
+print("success:"+str(utils.record_title['success'])+" fail:"+str(utils.record_title['fail'])+" pre_test_fail:"+str(utils.record_title['pre_test_fail']))
 
 #======字串的比較放在if裡的失敗=========
 # 以字串是否相同來當作ifelse的條件

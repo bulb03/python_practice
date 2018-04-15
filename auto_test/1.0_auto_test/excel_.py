@@ -37,7 +37,7 @@ class excel_():
 			print("pre_test_fail")		
 
 		#存檔
-		excel_be_written.save("test.xls")	
+		excel_be_written.save("PlanningandManage.xls")	
 
 
 #======因應xlrd的寫入功能一點屁用都沒有之解法=======
